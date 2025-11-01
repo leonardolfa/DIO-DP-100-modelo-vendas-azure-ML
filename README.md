@@ -1,48 +1,86 @@
-# Regressão Linear para vendas de sorvete
+# Experimento AutoML: Previsão de Vendas de Sorvete
 
-Este projeto aplica regressão linear para prever vendas de sorvete com base na temperatura. Utiliza MLflow para rastrear experimentos, registrar métricas e organizar o ciclo de vida do modelo. Executado no Azure Machine Learning Studio.
+Este repositório documenta dois experimentos realizados no [Azure Machine Learning Studio](https://azure.microsoft.com/en-us/products/machine-learning/), com o objetivo de prever vendas de sorvete com base na temperatura ambiente. Os experimentos foram conduzidos utilizando duas abordagens distintas:
+
+- **AutoML**: automação da seleção e treinamento de modelos.
+- **Designer**: construção manual de pipeline com modelo de regressão linear.
+
+Além dos experimentos realizados no Azure ML, este repositório também inclui um notebook com um modelo de regressão linear desenvolvido manualmente. O processo completo de treinamento e avaliação foi realizado utilizando Python e bibliotecas de machine learning, com execução também no ambiente do Azure ML. Para mais detalhes sobre esse notebook, consulte o arquivo de documentação [README.md do notebook](gelato_magico/gelato_magico_vendas.ipynb).
+
+---
+
+## Dados Utilizados
+
+- **Fonte:** [Arquivo CSV](data/vendas_2024.csv), gerado com apoio de IA generativa, contendo três colunas:
+  - `Data`: data da venda
+  - `Temperatura`: temperatura ambiente em graus Celsius
+  - `Vendas`: quantidade de sorvetes vendidos
+
+> Para os experimentos, foram utilizadas apenas as colunas `Temperatura` e `Vendas`.
+
+---
 
 ## Objetivo
 
-Prever a quantidade de sorvetes vendidos em função da temperatura, ajudando no planejamento de produção e estoque da sorveteria Gelato Mágico.
+Utilizar técnicas de regressão para prever o número de vendas de sorvete com base na temperatura ambiente.
 
-## Tecnologias utilizadas
+---
 
-- Python
-- Pandas
-- Scikit-learn
-- Matplotlib
-- MLflow
-- Azure Machine Learning Studio
+## Experimento 1: AutoML
 
-## Metodologia
+- **Ferramenta:** Azure Machine Learning Studio – AutoML
+- **Tipo de tarefa:** Regressão
+- **Modelos selecionados manualmente:**
+  - `XGBoostRegressor`
+  - `RandomForestRegressor`
+- **Tempo limite de execução:** 15 minutos
+- **Resultado:** O experimento não foi concluído totalmente devido ao tempo limite, mas cerca de 20 algoritmos foram executados e avaliados.
 
-1. **Dados e Pré-processamento**
-   - Dados fictícios criados com auxílio de IA generativa
-   - Leitura de dados históricos de temperatura e vendas
-   - Separação em treino e teste
+### Visualizações
 
-2. **Treinamento do modelo**
-   - Regressão Linear com Scikit-learn
-   - Avaliação com métricas: MAE, RMSE, R²
+- Lista de algoritmos executados, com métricas de erro e tempo de execução:
 
-3. **Visualização**
-   - Gráfico de dispersão com reta de regressão
-   - Interpretação visual da qualidade do ajuste
-    
-    #### Gŕafico de dispersão
-   ![Gráfico de dispersão](img/graf_dispersao.jpeg)
+  ![Algoritmos](img/automl/01_automl-algoritmos.png)
+  ![Algoritmos](img/automl/02_automl-algoritmos.png)
 
-   #### Gŕafico Regressão
-   ![Gráfico de dispersão](img/graf_regressao.jpeg)
+- Detalhes de execução de um modelo específico:
 
+  ![Detalhe Algoritmo](img/automl/03_automl-detalhes-algotimo.png)
 
-4. **Rastreamento com MLflow**
-   - Log de parâmetros e métricas
-   - Registro do modelo
+- Métricas de avaliação dos modelos:
 
-## Resultados
+  ![Métricas](img/automl/04_automl-detalhes-metricas.png)
 
-- **MAE**: 16.59  
-- **RMSE**: 24.93  
-- **R²**: 0.79
+---
+
+## Experimento 2: Designer
+
+- **Ferramenta:** Azure Machine Learning Studio – Designer
+- **Pipeline criado:**
+  - Importação do dataset
+  - Divisão entre treino (80%) e teste (20%)
+  - Aplicação do modelo `Linear Regression`
+  - Avaliação de desempenho
+
+### Esquema do Pipeline
+
+Visualização do fluxo de componentes utilizados:
+
+![Schema](img/designer/01_schema.png) ![Schema2](img/designer/02_schema.png)
+
+### Resultados
+
+- Saída do módulo **Score Model**:
+
+  ![Score Model](img/designer/03_score.png)
+
+- Saída do módulo **Evaluate Model**:
+
+  ![Evaluate Model](img/designer/04_evaluate.png)
+
+---
+
+## Conclusões
+
+- O AutoML testou diversos modelos e entregou métricas úteis, mesmo com tempo limitado.
+- O Designer permitiu uma abordagem mais controlada e rápida, ideal para testes simples.
